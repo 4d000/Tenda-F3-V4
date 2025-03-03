@@ -9,17 +9,19 @@ The script exploits a vulnerability found in the Tenda F3 router, enabling an at
 - Configuration file `RouterCfm.cfg` (that contains everything in plain text)
 - System log file `RouterSystem.log`
 - Flash memory dump `RouterFlash.bin`
+- Extract the admin username and password from the configuration file
 
 ## Features
 
 - **Download the configuration file**: Fetches the router's configuration file.
 - **Download the system log file**: Fetches the router's system log file.
 - **Download the flash dump**: Dumps the router's flash memory.
+- **Extract the admin password**: Decodes the base64-encoded password stored in the configuration file.
 
 ## Requirements
 
 - Python 3.x
-- `socket` and `optparse` libraries (usually included with Python)
+- `socket`, `optparse` and `base64` libraries (usually included with Python)
 
 ## Usage
 
@@ -32,8 +34,9 @@ python3 tendaF3-tool.py --target <target_ip> [options]
 - `-c, --config` : Download the configuration file (`RouterCfm.cfg`).
 - `-l, --log` : Download the system log file (`RouterSystem.log`).
 - `-f, --flash` : Download the flash dump (`RouterFlash.bin`).
-
-Example usage:
+- `-p, --password` : Extract the admin username and password from the configuration file.
+  
+Example of usage:
 ```
 python3 tendaF3-tool.py -t 192.168.0.1 --config
 ```

