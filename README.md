@@ -1,5 +1,9 @@
 # Tenda F3 Router Exploit & File Downloader
 
+<div align="center">
+<img src="TendaF3.png" alt="Tenda F3 Image" width="40%">
+</div>
+
 This project is a tool for downloading various files from the Tenda F3 router (v3/v4) through an unauthenticated vulnerability (CVE-2020-35391). It allows you to get the configuration file, system log, and flash dump from a vulnerable router.
 
 ## Overview
